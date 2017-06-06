@@ -2,7 +2,7 @@
  * Angular Material Time Picker
  * https://github.com/classlinkinc/angular-material-time-picker
  * @license MIT
- * v1.0.6
+ * v1.0.8
  */
 (function(window, angular, undefined) {
   'use strict';
