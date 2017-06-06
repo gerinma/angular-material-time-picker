@@ -2,7 +2,7 @@
  * Angular Material Time Picker
  * https://github.com/classlinkinc/angular-material-time-picker
  * @license MIT
- * v1.0.1
+ * v1.0.6
  */
 (function(window, angular, undefined) {
   'use strict';
@@ -63,10 +63,11 @@
           type: '@',
           message: '@',
           ngModel: '=',
-          readOnly: '<' // true or false
+          readOnly: '<', // true or false
+          ngRequired: '<?'
         },
         template: '<md-input-container md-no-float>' +
-          '<input required ' +
+          '<input ng-required="ngRequired" ' +
           'type="text"' +
           'name="time_{{type}}"' +
           'ng-model="time[type]"' +
@@ -77,7 +78,7 @@
           'ng-keydown="handleKeypress($event)" ng-disabled="readOnly"/>' +
           '<span class="md-up-arrow" aria-hidden="true" ng-click="!readOnly && increase()"></span>' +
           '<span class="md-down-arrow" aria-hidden="true" ng-click="!readOnly && decrease()"></span>' +
-          '<div class="time-error-messages" ng-messages="$parent.timeForm[\'time_\' + type].$error" role="alert">' +
+          '<div class="time-error-messages" ng-if="ngRequired" ng-messages="$parent.timeForm[\'time_\' + type].$error" role="alert">' +
           '<div ng-message="required">{{message}}</div>' +
           '</div>' +
           '</md-input-container>',
@@ -199,11 +200,12 @@
         scope: {
           message: '@',
           readOnly: '<', // true or false
-          ngModel: '='
+          ngModel: '=',
+          ngRequired: '<?'
         },
         template: '<md-input-container md-no-float>' +
           '<md-select ' +
-          'required ' +
+          'ng-required="ngRequired" ' +
           'name="meridiem"' +
           'ng-model="meridiem"' +
           'ng-change="updateTime()"' +
@@ -212,7 +214,7 @@
           '<md-option value="AM" ng-disabled="readOnly">AM</md-option>' +
           '<md-option value="PM" ng-disabled="readOnly">PM</md-option>' +
           '</md-select>' +
-          '<div class="time-error-messages" ng-messages="$parent.timeForm.meridiem.$error" role="alert">' +
+          '<div class="time-error-messages" ng-if="ngRequired" ng-messages="$parent.timeForm.meridiem.$error" role="alert">' +
           '<div ng-message="required">{{message}}</div>' +
           '</div>' +
           '</md-input-container>',
@@ -257,19 +259,21 @@
         scope: {
           message: '<',
           ngModel: '=',
-          readOnly: '<' // true or false
+          readOnly: '<', // true or false
+          ngRequired: '<?',
+          hideClock: '<?'
         },
         template: '<form name="timeForm">' +
-          '<button class="md-icon-button md-button md-ink-ripple" type="button" ng-click="!readOnly && showPicker($event)">' +
+          '<button class="md-icon-button md-button md-ink-ripple" type="button" ng-if="!hideClock" ng-click="!readOnly && showPicker($event)">' +
           '<md-icon>' +
           '<i class="material-icons">&#xE192;</i>' +
           '</md-icon>' +
           '<div class="md-ripple-container"></div>' +
           '</button>' +
-          '<md-hours-minutes type="HH" ng-model="ngModel" message="{{message.hour}}" read-only="readOnly"></md-hours-minutes>' +
+          '<md-hours-minutes type="HH" ng-model="ngModel" message="{{message.hour}}" read-only="readOnly" ng-required="ngRequired===undefined||ngRequired===true"></md-hours-minutes>' +
           '<span class="time-colon">:</span>' +
-          '<md-hours-minutes type="MM" ng-model="ngModel" message="{{message.minute}}" read-only="readOnly"></md-hours-minutes>' +
-          '<md-meridiem ng-if="!noMeridiem" ng-model="ngModel" message="{{message.meridiem}}" read-only="readOnly"></md-meridiem>' +
+          '<md-hours-minutes type="MM" ng-model="ngModel" message="{{message.minute}}" read-only="readOnly" ng-required="ngRequired===undefined||ngRequired===true"></md-hours-minutes>' +
+          '<md-meridiem ng-if="!noMeridiem" ng-model="ngModel" message="{{message.meridiem}}" read-only="readOnly" ng-required="ngRequired===undefined||ngRequired===true"></md-meridiem>' +
           '</form>',
         controller: ["$scope", "$rootScope", "$mdpTimePicker", "$attrs", function($scope, $rootScope, $mdpTimePicker, $attrs) {
 
